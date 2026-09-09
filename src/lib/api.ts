@@ -9,7 +9,8 @@ function getAuthToken(): string | null {
 
 export async function apiRequest<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  retries = 1
 ): Promise<T> {
   const token = getAuthToken();
   const headers: Record<string, string> = {
@@ -21,10 +22,20 @@ export async function apiRequest<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
+  } catch (netErr: any) {
+    // If Render was waking up from sleep or dropped the TCP socket, retry once
+    if (retries > 0) {
+      await new Promise(r => setTimeout(r, 2000));
+      return apiRequest<T>(endpoint, options, retries - 1);
+    }
+    throw new Error('Server connection was interrupted. The server may be waking up from sleep—please try again.');
+  }
 
   const data = await res.json().catch(() => ({}));
 
