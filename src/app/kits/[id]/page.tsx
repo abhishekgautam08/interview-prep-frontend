@@ -203,6 +203,31 @@ export default function KitBuilderPage() {
     });
   };
 
+  const handleMoveQuestion = (qId: string, direction: 'up' | 'down') => {
+    if (!kit) return;
+    const currentList = selectedCategory === 'all'
+      ? kit.questions
+      : kit.questions.filter(q => q.category === selectedCategory);
+
+    const currentIndex = currentList.findIndex(q => q.id === qId);
+    if (currentIndex === -1) return;
+    const neighborIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (neighborIndex < 0 || neighborIndex >= currentList.length) return;
+
+    const neighborId = currentList[neighborIndex].id;
+
+    const fullIdx1 = kit.questions.findIndex(q => q.id === qId);
+    const fullIdx2 = kit.questions.findIndex(q => q.id === neighborId);
+    if (fullIdx1 === -1 || fullIdx2 === -1) return;
+
+    const newQuestions = [...kit.questions];
+    const temp = newQuestions[fullIdx1];
+    newQuestions[fullIdx1] = newQuestions[fullIdx2];
+    newQuestions[fullIdx2] = temp;
+
+    triggerAutoSave({ ...kit, questions: newQuestions });
+  };
+
   const handleAddCustomQuestion = (e: React.FormEvent) => {
     e.preventDefault();
     if (!kit || !newQPrompt.trim()) return;
@@ -770,6 +795,27 @@ export default function KitBuilderPage() {
 
                     <div className="flex items-center gap-1.5">
                       <button
+                        type="button"
+                        onClick={() => handleMoveQuestion(q.id, 'up')}
+                        disabled={idx === 0}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+                        title="Move question up"
+                      >
+                        <MoveUp className="w-4 h-4" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleMoveQuestion(q.id, 'down')}
+                        disabled={idx === filteredQuestions.length - 1}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+                        title="Move question down"
+                      >
+                        <MoveDown className="w-4 h-4" />
+                      </button>
+
+                      <button
+                        type="button"
                         onClick={() => handleTogglePin(q.id)}
                         className={`p-1.5 rounded-lg transition-colors ${
                           isPinned
@@ -782,6 +828,7 @@ export default function KitBuilderPage() {
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => handleDeleteQuestion(q.id)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
                         title="Delete question"
