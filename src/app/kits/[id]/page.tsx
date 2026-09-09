@@ -33,6 +33,8 @@ import {
   AlertTriangle,
   MoveUp,
   MoveDown,
+  Download,
+  Printer,
 } from 'lucide-react';
 
 export default function KitBuilderPage() {
@@ -355,11 +357,25 @@ export default function KitBuilderPage() {
       setScheduleDays(newDays);
       setRegenMessage(`Schedule successfully redistributed across ${newDays} days!`);
       setTimeout(() => setRegenMessage(null), 3000);
-    } catch (err: any) {
-      alert(`Schedule redistribution failed: ${err.message}`);
     } finally {
       setIsRegenerating(false);
     }
+  };
+
+  const handleExportJson = () => {
+    if (!kit) return;
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(kit, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    const safeTitle = (kit.role.title || 'prep_kit').toLowerCase().replace(/[^a-z0-9]/g, '_');
+    downloadAnchor.setAttribute("download", `${(kit.source.company || 'company').toLowerCase()}_${safeTitle}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   if (error && !kit) {
@@ -516,13 +532,33 @@ export default function KitBuilderPage() {
           </div>
         </div>
 
-        {/* Practice CTA */}
-        <div className="flex items-center gap-3">
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleExportJson}
+            title="Export Kit JSON (Appendix A format)"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-medium transition-colors"
+          >
+            <Download className="w-3.5 h-3.5 text-brand-400" />
+            <span className="hidden sm:inline">Export JSON</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            title="Print or Save as PDF"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-medium transition-colors"
+          >
+            <Printer className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="hidden sm:inline">Print / PDF</span>
+          </button>
+
           <Link
             href={`/kits/${id}/practice`}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-brand-600/25 transition-all hover:scale-105"
+            className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-brand-600/25 transition-all hover:scale-105"
           >
-            <Play className="w-4 h-4 fill-current" />
+            <Play className="w-3.5 h-3.5 fill-current" />
             Practice Mode & AI Mock
           </Link>
         </div>
