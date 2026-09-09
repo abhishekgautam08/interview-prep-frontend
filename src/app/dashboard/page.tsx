@@ -140,17 +140,43 @@ export default function DashboardPage() {
     }
   };
 
+  const handleLoadSingleDemo = () => {
+    setJd(
+`Role: Senior Full-Stack Engineer
+Company: Stripe
+Location: Remote / San Francisco
+
+About the Role:
+Stripe builds economic infrastructure for the internet. As a Senior Full-Stack Engineer on our Core Payments & Billing team, you will design, implement, and scale high-throughput financial infrastructure and user-facing dashboards that power millions of global businesses.
+
+Key Responsibilities:
+• Architect, build, and maintain mission-critical APIs and web interfaces using TypeScript, React, and Node.js.
+• Partner closely with product management and security architects to deliver reliable, sub-100ms payment workflows.
+• Design resilient distributed architectures, asynchronous message processing (Kafka/RabbitMQ), and optimize database performance (PostgreSQL, Redis).
+• Champion engineering excellence through disciplined code reviews, automated unit & integration testing, and production observability.
+
+Requirements:
+• 5+ years of software engineering experience building production-grade web applications.
+• Deep proficiency in TypeScript, React, Node.js, and relational database schema design.
+• Proven track record designing and maintaining distributed systems, caching layers, and high-availability REST/GraphQL microservices.
+• Strong foundation in concurrency, idempotent transaction processing, and latency optimization.
+• Excellent cross-functional communication skills, technical leadership, and empathy for developer UX.`
+    );
+    setCompanyUrl('https://stripe.com');
+    setDays(5);
+  };
+
   const handleLoadExampleBatch = () => {
     const exampleCases = [
       {
         id: 'case-01',
-        jd: 'Senior Full-Stack Engineer at Stripe. Requirements: 5+ years of experience with TypeScript, React, Node.js, distributed systems, REST APIs, and microservices architecture. High-availability financial transaction systems preferred.',
+        jd: 'Role: Senior Full-Stack Engineer at Stripe\nRequirements: 5+ years experience across TypeScript, React, and Node.js. Experience designing distributed microservices, REST APIs, and caching layers with Redis. High-availability payment processing and database schema design skills required.',
         company_url: 'https://stripe.com',
         days: 5,
       },
       {
         id: 'case-02',
-        jd: 'Staff Backend Engineer at Airbnb. Requirements: Deep experience in distributed systems, Java or Go, Kafka streaming, Redis caching, large-scale database schema design, and cloud infrastructure.',
+        jd: 'Role: Staff Backend Engineer at Airbnb\nRequirements: 8+ years building large-scale distributed systems. Proficiency in Go, Java, or Node.js. Deep expertise in event streaming with Kafka, asynchronous workflows, microservice scalability, and database resilience.',
         company_url: 'https://airbnb.com',
         days: 7,
       },
@@ -426,9 +452,19 @@ export default function DashboardPage() {
             ) : (
               <form onSubmit={handleGenerate} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                    Job Description (Pasted Text)
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                      Job Description (Pasted Text)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleLoadSingleDemo}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-950/70 hover:bg-brand-900/80 border border-brand-800 text-xs font-medium text-brand-300 transition-all hover:scale-105 shadow-sm"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-brand-400" />
+                      Load Demo Role
+                    </button>
+                  </div>
                   <textarea
                     required
                     rows={6}
@@ -527,9 +563,10 @@ export default function DashboardPage() {
                 type="button"
                 onClick={handleLoadExampleBatch}
                 disabled={isBatchRunning}
-                className="text-xs text-brand-400 hover:text-brand-300 underline font-medium whitespace-nowrap disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-950/70 hover:bg-brand-900/80 border border-brand-800 text-xs font-medium text-brand-300 transition-all hover:scale-105 shadow-sm disabled:opacity-50 whitespace-nowrap"
               >
-                Insert Example JSON
+                <Sparkles className="w-3.5 h-3.5 text-brand-400" />
+                Load Demo Batch
               </button>
             </div>
 
