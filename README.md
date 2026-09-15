@@ -1,6 +1,6 @@
 # The AI Interview Prep Kit — Frontend Web Application
 
-> **Assessment ID:** `FS-AI-INTERVIEW-01` | **Client:** Trao Full-Stack Engineering Assessment  
+> **ID:** `FS-AI-INTERVIEW-01` | **Client:** Full-Stack Engineering  
 > **Repository:** `interview-prep-frontend` (Standalone Next.js Frontend)
 
 A modern, highly responsive Next.js application designed for interview preparation with real-time generation feedback, an inline reshapeable Kit Builder, spaced-repetition flashcards, and an interactive AI Mock Interviewer.

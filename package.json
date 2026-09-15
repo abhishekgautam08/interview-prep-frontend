@@ -1,7 +1,7 @@
 {
   "name": "interview-prep-frontend",
   "version": "1.0.0",
-  "description": "The AI Interview Prep Kit Frontend - Trao Engineering Assessment (FS-AI-INTERVIEW-01)",
+  "description": "The AI Interview Prep Kit Frontend - (FS-AI-INTERVIEW-01)",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
